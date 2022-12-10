@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  app:
+    build: 
+      context: node
+    image: devrsales/app-express:latest
+    container_name: app
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh node index.js
+    networks:
+      - desafionet
+    volumes:
+      - ./node:/usr/src/app
+    tty : true
+    depends_on:
+      - db
+    
+  proxy-reverso:
+    build: 
+      context: nginx
+    image: devrsales/nginx:dev
+    container_name: proxy-reverso
+    entrypoint: dockerize -wait http://app:3000 -timeout 20s /docker-entrypoint.sh nginx -g 'daemon off;'
+    networks:
+      - desafionet
+    ports:
+      - "8080:80"
+    depends_on:
+      - app
+
+  db:
+    image: mysql:5.7
+    command: --innodb-use-native-aio=0
+    container_name: db
+    restart: always
+    tty: true
+    volumes:
+      - ./database:/var/lib/mysql
+    environment:
+      - MYSQL_DATABASE=nodedb
+      - MYSQL_ROOT_PASSWORD=root
+    networks:
+      - desafionet
+
+networks: 
+  desafionet:
+    driver: bridge
