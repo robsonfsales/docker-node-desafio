@@ -1,10 +1,2 @@
 # ignorar arquivos mysql
-nodedb
-mysql
-performance_schema
-sys
-*.cnf
-*.pem
-*.sock
-ib*
-
+database/*
