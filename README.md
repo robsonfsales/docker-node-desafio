@@ -19,7 +19,7 @@ E toda vez que a aplicação node inicializa, cria a tabela caso não tenha cria
 Para executar esse projeto é necessário possuir o Docker instalado e configurado.
 
 ## Construindo e executando as imagens do projeto a partir do arquivo docker-compose.yaml
-> docker-compose up -d --build
+> docker-compose up -d
 
 ## Finalizando os processos
 > docker-compose down

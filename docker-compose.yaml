@@ -3,22 +3,22 @@ version: '3'
 services:
   app:
     build: 
-      context: node
-    image: devrsales/app-express:latest
+      context: ./node
+      dockerfile: Dockerfile
+    image: desafio/app-node:dev
     container_name: app
     entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh node index.js
     networks:
       - desafionet
-    volumes:
-      - ./node:/usr/src/app
     tty : true
     depends_on:
       - db
     
   proxy-reverso:
     build: 
-      context: nginx
-    image: devrsales/nginx:dev
+      context: ./nginx
+      dockerfile: Dockerfile
+    image: desafio/proxy-reverso:dev
     container_name: proxy-reverso
     entrypoint: dockerize -wait http://app:3000 -timeout 20s /docker-entrypoint.sh nginx -g 'daemon off;'
     networks:
